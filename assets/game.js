@@ -1,7 +1,7 @@
     //*******************************************************************
-    //**  OpenShift, Wild Wild West Shooter
+    //**  Kubernetes, Wild Wild West Shooter
     //**  Author: Grant Shipley @gshipley
-    //**  Shootem-up game to teach what openshift resources can be killed
+    //**  Shootem-up game to teach what kubernetes resources can be killed
     //*******************************************************************
     var game;
     var gunSight;
@@ -11,22 +11,19 @@
     var emitter;
     var gameLoop;
     var index=0;
-    var frameObject;
     var line='';
     var yeehaw;
     var explosion;
     var gameID;
     var objectText;
-    var killFrameText;
     var scoreText;
     var introText;
     var gameScore = 0;
     var noviceMode = true;
     var content = [
         " ",
-        "The OpenShift Evangelist Team presents",
-        " ",
-        "OpenShift, the Wild Wild West way"
+        "KubeCon China 2019",
+        "Kubernetes, the Wild Wild West way"
     ];
     var locations = [
         [341, 409],  // door 1
@@ -39,27 +36,9 @@
         [860, 634],  // Barrel
         [30, 530]    // cactus
     ];
-    var backend_path = window.backend_path || '/ws';
-    var openshiftObjects = [
-        'SERVICE',
-        'POD',
-        'BUILD',
-        'DEPLOYMENT_CONFIG',
-        'BUILD_CONFIG',
-        'PVC',
-        'ROUTE'
-    ];
+    var backend_path = "http://backend-wildwest.apps.techdope.io/";
 
-    var killFrameHelp = {};
-    killFrameHelp['POD'] =  'You killed a\nPOD\n\nThis is okay because openshift\nwill recover gracefully.';
-    killFrameHelp['ROUTE'] = 'You killed a\nROUTE\n\nThis removes the URL and\nis not automatically\nrecovered';
-    killFrameHelp['SERVICE'] = 'You killed a\nSERVICE\n\n';
-    killFrameHelp['BUILD'] = 'You killed a\nBUILD\n\n';
-    killFrameHelp['DEPLOYMENT_CONFIG'] = 'You killed a\nDEPLOYMENT CONFIG\n\n';
-    killFrameHelp['BUILD_CONFIG'] = 'You killed a\nBUILD_CONFIG\n\n';
-    killFrameHelp['PVC'] = 'You killed a\nPERSISTENT VOLUME';
-
-    // We need to create the game on the server
+        // We need to create the game on the server
     $.ajax({
         url: backend_path+'/createGame',
         async: false,
@@ -85,7 +64,7 @@
         game.load.image('ROUTE', 'assets/route.png');
         game.load.audio('yeehaw', 'assets/yeehaw.wav');
         game.load.audio('explosion', 'assets/explosion.wav');
-        game.load.image('killframe', 'assets/frame.png');
+
     }
 
     function create() {
@@ -128,7 +107,7 @@
             
             if(checkOverlap(gunSight, currObject)) {
                 // delete the object on the game server
-                stopGameDisplayLoop();
+                //stopGameDisplayLoop();
                 deletePlatformObject(currOpenShiftObject);
 
                 // Add the emitter for the explosion and play the yeehaw for target hit
@@ -165,20 +144,7 @@
         } else {
             noviceMode = false;
         }
-    }
-
-    function displayKillFrame() {
-        frameObject = game.add.sprite(220, 153, 'killframe');
-        frameObject.inputEnabled = true;
-
-        killFrameText = game.add.text(330, 270, '', { font: "26pt Courier", fill: "#000000", stroke: "#000000", strokeThickness: 2 });
-        killFrameText.setText(killFrameHelp[currOpenShiftObject.objectType]);
-
-        frameObject.events.onInputDown.add(function() {
-            frameObject.destroy();
-            killFrameText.destroy();
-            startGameDisplayLoop();
-        }, this);
+        noviceMode = false;
     }
 
     function displayObject() {
@@ -220,15 +186,8 @@
             type: 'GET',
             data: { gameID: gameID, objectType : currOpenShiftObject.objectType, objectName : currOpenShiftObject.objectName, objectID : currOpenShiftObject.objectID },
             success: function() {
-                if(noviceMode == false) {
-                    startGameDisplayLoop();
-                } else {
-                    displayKillFrame(currOpenShiftObject);
-
-                }
             },
             error: function() {
-                startGameDisplayLoop();
             }
         })
     }
