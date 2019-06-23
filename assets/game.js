@@ -36,7 +36,7 @@
         [860, 634],  // Barrel
         [30, 530]    // cactus
     ];
-    var backend_path = "http://backend-wildwest.apps.techdope.io/";
+    var backend_path = "http://backend-wildwest.b9ad.pro-us-east-1.openshiftapps.com/";
 
         // We need to create the game on the server
     $.ajax({
