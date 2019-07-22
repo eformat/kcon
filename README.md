@@ -63,3 +63,13 @@ If you want to enable destructive mode, where the player can actually delete thi
 ```
 $ oc policy add-role-to-user edit system:serviceaccount:wildwest:default
 ```
+
+### Local
+
+```
+BACKEND_SERVICE=localhost:8080;PORT=8081 npm start
+
+oc new-project wildwest
+
+
+```

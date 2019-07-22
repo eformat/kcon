@@ -22,7 +22,7 @@
     var noviceMode = true;
     var content = [
         " ",
-        "KubeCon China 2019",
+        "OpenShift Meetup Sydney July 24 2019",
         "Kubernetes, the Wild Wild West way"
     ];
     var locations = [
